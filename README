@@ -1,0 +1,153 @@
+/* Copyright Marius-Tudor Zaharia 313CAa 2022-2023 */
+
+*General
+	Ideea generala de rezolvare, prezenta in toate operatiile cerute, a fost sa
+salvez pe linia 0 a fiecarei matrice din problema numarul de linii pe coloana
+0, numarul de coloane pe coloana 1, respectiv suma tuturor elementelor matricei
+pe coloana 2. Motivatia din spatele acestei alegeri a fost programarea
+defensiva. Initial, am incercat sa utilizez vectori pentru a stoca dimensiunile
+si suma elementelor matricelor, dar, cum acesti vectori trebuiau alocati
+dinamic, trebuiau eliberati de fiecare data cand o alta alocare de memorie
+esua. Astfel, functiile mele aveau prea multi parametri si se lungeau pana cand
+deveneau ineficiente.
+	In ceea ce priveste forma, am vrut ca in main sa rezolv fiecare cerinta
+prin intermediul unei functii de tipul operation_X. Desi numele nu este
+neaparat sugestiv pentru ceea ce fac functiile, in interiorul lor sunt apelate
+alte functii, care au nume sugestive, astfel ca totul devine clar, mai ales cu
+ajutorul comentariilor din cod.
+	De asemenea, legat de programarea defensiva, la fiecare esuare a unei
+alocari, am eliberat toate tablourile alocate dinamic, apoi am incheiat
+programul cu exit(-1). Dupa ce am terminat operatiile standard, fara bonus, am
+aflat de la laborant ca nu trebuie neaparat eliberate toate alocarile existente
+daca dau exit(-1). Am lasat, totusi, eliberarile asa cum le-am facut, deoarece
+muncisem mult la ele. La bonus, nu am mai eliberat tot, am folosit doar
+exit(-1), pentru a ma incadra in cele 80 de linii impuse per functie.
+
+*Limitari
+	Am facut un compromis in functia strassen_product, legat de coding style,
+anume am scris functia fara linii libere, astfel ca se citeste mai greu, si am
+scris, in cateva locuri, cate 2 comenzi pe linie, separate prin virgula, tocmai
+pentru a ma incadra in cele 80 de linii impuse de checker pentru o functie.
+Totusi, voi clarifica ce am facut in acea functie in cele ce urmeaza, astfel ca
+nu o consider o problema majora.
+	Tot legat de aspect, codul poate parea ingreunat de prezenta programarii
+defensive, caci nu am reusit sa creez o functie care sa elibereze totul asa cum
+trebuie, pentru toate cazurile. De exemplu, uneori am nevoie sa eliberez doar o
+parte din linii, sau trebuie sa merg cu eliberarea pana la size, si nu pana la
+size - 1. Unde s-a putut, am folosit functia de eliberare totala (de la
+operatia Q). Am izolat, totusi, peste tot programarea defensiva de restul
+codului, prin linii libere, astfel ca este posibil de parcurs codul si de
+urmarit logica sa fara a fi deranjati de programarea defensiva.
+
+*Problema in sine
+	In main am alocat un tablou de tip int ***, in care sa stochez matricele.
+Ideea este ca la inceput am alocat o singura pozitie, pentru ca, mai apoi, cand
+nu mai este loc pentru a adauga o noua matrice, sa folosesc realloc pentru a
+"creste" capacitatea, cu ajutorul unui increment de dimensiune 10, memoria
+fiind, astfel, folosita eficient, nefiind nici prea multe locuri goale si
+nici facand la fiecare pas o noua alocare.
+	In continuare, am tratat fiecare operatie in parte.
+
+*Operatia L
+	Prima data am verificat daca mai am loc de inca o matrice in tablou, in
+caz contrar, am folosit o functie care sa aloce mai mult spatiu. De notat este
+ca am utilizat functii diferite pentru marirea tabloului mare si pentru
+adaugarea efectiva a unei noi matrice la finalul acestuia, alocand si memorie
+pentru ea.
+
+*Operatiile D si P
+	Implementarile sunt clare, usor de facut prin faptul ca fiecare matrice are
+atasata pe linia 0 dimensiunile.
+
+*Operatia C
+	Am avut nevoie de 2 vectori auxiliari, alocati, de asemenea, dinamic,
+pentru a salva liniile, respectiv coloanele dupa care se doreste
+redimensionarea. Am utilizat o matrice auxiliara, alocata dinamic cu
+dimensiunile dorite, in care am asezat elementele corespunzatoare din matricea
+originala, atent fiind la indici. Am creat o functie care sa imi elibereze
+matricea mama si care sa o aloce la loc cu noi dimensiuni, tinand cont si de
+programarea defensiva. Apoi, am copiat elementele din auxiliara in matricea din
+tabloul mare, dupa care am eliberat auxiliara. Valabil pentru toata problema,
+am folosit structuri repetitive for pentru a copia elementele, pentru a evita
+sa egalez pointerii a doua matrice, ca sa nu pierd valorile daca eliberez una
+din ele.
+
+*Operatia M
+	Similar cu unele operatii precedente, am mai alocat spatiu pentru o matrice
+la finalul tabloului (daca nu mai era), apoi am folosit o functie carea primea
+ca parametri 2 matrice de inmultit si destinatia unde sa puna rezultatul,
+alaturi de dimensiunile lor, astfel ca nu a mai fost necesara o auxiliara.
+
+*Operatia O
+	Am folosit sortarea prin selectie si am creat o functie de swap pentru
+matrice, cu ajutorul pointerilor, care mi s-a parut similara cu functia de swap
+pentru variabile int.
+
+*Operatia T
+	Foarte asemanator cu operatia de redimensionare, am utilizat o auxiliara,
+provocarea fiind sa am grija ca, la alocare, sa schimb numarul de linii cu cel
+de coloane.
+
+*Operatia R
+	Am folosit, de asemenea, o matrice auxiliara. Nu eram familiarizat dinainte
+cu exponentierea rapida, astfel ca m-am folosit de link-ul pus la dispozitie
+pentru a afla ce anume trebuie sa fac. Am vazut ca exista o metoda recursiva si
+una iterativa, dar eu am optat pentru cea din urma, intelegand ca este mai
+rapida. Am initializat auxiliara drept matricea unitate. Am inteles ca
+exponentul trebuie, practic, scris ca suma de puteri ale lui 2, obtinand, apoi,
+niste exponenti 1 sau 0, in functie de prezenta sau absenta unei anumite puteri
+a lui 2 din suma respectiva. Acele cifre de 0 si 1 sunt cifrele reprezentarii
+exponentului initial in baza 2. Totul se reduce, astfel, la determinarea
+cifrelor reprezentarii exponentului in baza 2: daca cifra curenta este 1,
+auxiliara se inmulteste cu matricea initiala, iar, de fiecare data, matricea
+initiala se inmulteste cu ea insasi, pentru a obtine puterile lui 2 despre care
+vorbeam mai sus. La final, auxiliara este raspunsul, pe care il copiez in array
+in locul matricei initiale.
+
+*Operatia F
+	Am folosit functia de swap despre care am spus mai sus, astfel: am dus
+matricea pe care doream sa o elimin la finalul array-ului mare, dupa care am
+eliminat-o, pentru a nu ramane goluri. De asemenea, asa cum era recomandat in
+enunt, am verificat daca am ramas cu un numar de matrice (size) mai mic decat
+jumatate din capacitatea totala alocata (capacity). Daca da, am realocat
+memoria, la jumatate din capacitate, astfel ca lucrul cu memoria este eficient.
+
+*Operatia Q
+	Pentru forma, am facut si functia operation_Q, desi ea contine doar apelul
+catre functia de eliberare totala. Aceasta elibereaza memoria de la "interior
+spre exterior", intai eliberand coloanele, apoi liniile, si abia la urma
+array-ul mare.
+
+*Operatia S
+	Nici cu acest algoritm nu eram familiarizat, astfel ca am urmat intocmai
+pasii din documentatie.
+	Intai am alocat spatiu la finalul array-ului pentru o noua matrice, ca mai
+sus. Legat de functia alloc_defensive_strassen, ea este folosita pentru a
+"sparge" matricele de inmultit in cele 4 sub-matrice. In functia
+strassen_product, am impartit efectiv matricele pe blocuri. Apoi, am incercat
+sa calculez recursiv cele 7 matrice ajutatore, apeland functia sum_strassen in
+interiorul apelului functiei recursive. Acest lucru m-a condus la memory leaks,
+caci functia sum_strassen aloca memorie pe care eu nu mai aveam cum sa o
+eliberez. Am fost nevoit sa folosesc 2 matrice auxiliare, help1 si help2, in
+care puneam sumele sau diferentele necesare pentru cele 7 matrice. De asemenea,
+a trebuit sa eliberez dupa fiecare pas memoria alocata celor 2 matrice
+ajutatoare. Astfel, codul s-a aglomerat si nu am mai putut lasa spatii si nici
+sa adaug linii de comentarii, pentru a ma incadra in cele 80 de linii. Dupa
+aceea, am creat si cele 4 matrice-bloc care vor alcatui matricea rezultat, apoi
+completand-o si pe ea. La final, am eliberat toate matricele ajutatoare
+necesare algoritmului. De notat este ca recursivitatea merge pana cand
+matricele de inmultit sunt de dimensiune 1x1, cand se returneaza matricea
+reprezentata de produsul lor normal. Ca observatie, am notat matricea rezultat
+cu c, poate nesugestiv, dar asa era notata in documentatie si a fost mai usor
+de lucrat cu ea asa.
+
+*Feedback
+	Per total, consider ca tema si-a indeplinit obiectivul, anume sa ne faca sa
+ne acomodam cu alocarea dinamica a memoriei si cu pointerii. La inceput, parea
+imposibila, dar, pe parcurs, lucrurile s-au mai clarificat. Dificultatea temei
+consider ca sta in complexitatea ei, in alegerea unei forme eficiente si in
+cantitatea de cod scris. De asemenea, programarea defensiva mi s-a parut cel
+mai greu de implementat, caci a trebuit sa am grija sa eliberez mereu totul si
+sa ma incadrez, totusi, in 80 de linii per functie. Dintre operatii, prima mi
+s-a parut cea mai grea si a durat cel mai mult, caci mi-a fost greu pana am
+reusit sa salvez matricele in memorie si sa functioneze pe orice caz.
